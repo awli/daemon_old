@@ -65,9 +65,14 @@ angular.module('daemon.radio', [])
       if error
         console.log('failed to open: ' + error)
 
+      console.log('registering radio with address: ' + _radioAddr + ', port: ' + _portPath)
       _ndl3Radio.connectXBee(_radioAddr, _serialPort)
+      console.log 'function returned'
       _ndl3Radio.on('string', (str) ->
         console.log('got string', str)
+        )
+      _ndl3Radio.on('object', (obj) ->
+        console.log('got object', obj)
         )
 
     return {
@@ -84,6 +89,7 @@ angular.module('daemon.radio', [])
       close: ->
         if _init
           _ndl3Radio.close() if _ndl3Radio?
+          _serialPort.close() if _serialPort?
           _ndl3Radio = undefined
           _serialPort = undefined
           _portPath = ''
